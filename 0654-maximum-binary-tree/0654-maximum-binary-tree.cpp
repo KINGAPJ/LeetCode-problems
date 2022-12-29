@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-    //T(n) = 2*T(n/2) + O(n)
+    //T(n) = 2*T(n/2) + O(n) : O(nlogn)
     TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
         if(nums.empty())
             return nullptr;
