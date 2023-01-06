@@ -22,9 +22,6 @@ class Solution{
             return -1;
         if(n1 == n2)
             return 0;
-        // for(int i = 1000; i < 10000; i++){
-        //     cout<<"i: "<<i<<":"<<prime[i]<<'\n';
-        // }
         memset(vis, false, sizeof(vis));
         queue<vector<int>> q;
         q.push({n1, 0});
@@ -35,7 +32,6 @@ class Solution{
             if(curr == n2)
                 return moves;
             vis[curr] = true;
-            // cout<<"c: "<<curr<<"m: "<<moves<<'\n';
             for(int j = 0; j < 4; j++){
                 int place = pow(10, j);
                 int base = curr - ((curr/place) % 10) * place;
