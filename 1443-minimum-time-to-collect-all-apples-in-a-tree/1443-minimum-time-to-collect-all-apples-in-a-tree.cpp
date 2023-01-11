@@ -1,3 +1,15 @@
+/*
+        2 cases:
+                i am at node 0 or any arbitrary node:
+                            0
+                           /
+                          1
+        i: there may be an apple at 1.. so add 2 to path and check its subtree if further anyth needs to be added
+        ii: there may not be an apple at 1.. so we check its subtree if further anyth needs to be added..
+            if yes then add 2 + whatever that is
+            if no then add nothing
+
+*/
 class Solution {
     vector<vector<int>> adj;
     vector<bool> vis;
@@ -8,13 +20,9 @@ public:
         int ret = 0;
         for(auto &i: adj[node]){
             if(!vis[i]){
-                if(epulu[i]){
-                    ret += 2 + dfs(i);
-                }else{
-                    int t = dfs(i);
-                    if(t)
-                        ret += 2 + t;
-                }
+                int t = dfs(i);
+                if(epulu[i] || t)
+                    ret += 2 + t;
             }
         }
         return ret;
