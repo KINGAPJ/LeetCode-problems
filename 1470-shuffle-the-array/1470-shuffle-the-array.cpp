@@ -1,11 +1,12 @@
 class Solution {
 public:
     vector<int> shuffle(vector<int>& nums, int n) {
-        vector<int> ans(2*n);
-        for(int i = 0; i < n; i++){
-            ans[2*i] = nums[i];
-            ans[2*i+1] = nums[i+n];
+        for(int i = 0; i < n; i++)
+            nums[i] += (nums[i+n] * (1<<10));
+        for(int i = n-1; i >= 0; i--){
+            nums[2*i+1] = nums[i]/(1<<10);
+            nums[2*i] = nums[i]%(1<<10);
         }
-        return ans;
+        return nums;
     }
 };
