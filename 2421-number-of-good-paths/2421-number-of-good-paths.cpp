@@ -1,78 +1,67 @@
-class UnionFind {
-private:
-    vector<int> parent, rank;
-
+class DSU{
+    vector<int> faction, size;
 public:
-    UnionFind(int size) {
-        parent.resize(size);
-        rank.resize(size, 0);
-        for (int i = 0; i < size; i++) {
-            parent[i] = i;
-        }
+    DSU(int n){
+        faction = vector<int> (n);
+        size = vector<int> (n);
+        for(int i = 0; i < n; i++)
+            faction[i] = i;
     }
-    int find(int x) {
-        if (parent[x] != x) parent[x] = find(parent[x]);
-        return parent[x];
+    int find_faction(int node){
+        if(faction[node] != node)
+            return find_faction(faction[node]);
+        return faction[node];
     }
-    void union_set(int x, int y) {
-        int xset = find(x), yset = find(y);
-        if (xset == yset) {
-            return;
-        } else if (rank[xset] < rank[yset]) {
-            parent[xset] = yset;
-        } else if (rank[xset] > rank[yset]) {
-            parent[yset] = xset;
-        } else {
-            parent[yset] = xset;
-            rank[xset]++;
+    void join_faction(int node, int join){
+        int node_faction = find_faction(node); // b
+        int faction_to_join = find_faction(join); // a
+        if(node_faction != faction_to_join){
+            if(size[node_faction] > size[faction_to_join]){
+                swap(node_faction, faction_to_join);
+            }
+            faction[node_faction] = faction_to_join;
+            size[faction_to_join] += node_faction;
         }
     }
 };
-
 class Solution {
 public:
     int numberOfGoodPaths(vector<int>& vals, vector<vector<int>>& edges) {
         int n = vals.size();
-        vector<vector<int>> adj(n);
-        for (auto& edge : edges) {
-            adj[edge[0]].push_back(edge[1]);
-            adj[edge[1]].push_back(edge[0]);
+        vector<vector<int>> node_vals(n);
+        for(int i = 0; i < n; i++)
+            node_vals[i] = {vals[i], i};
+        sort(node_vals.begin(), node_vals.end());
+        vector<vector<vector<int>>> adj(n);
+        DSU dsu(n);
+        for(auto &i: edges){
+            adj[i[0]].push_back({vals[i[1]], i[1]});
+            adj[i[1]].push_back({vals[i[0]], i[0]});
         }
-        // Mapping from value to all the nodes having the same value in non-descending order of values.
-        map<int, vector<int>> valuesToNodes;
-        for (int node = 0; node < n; node++) {
-            valuesToNodes[vals[node]].push_back(node);
-        }
-
-        UnionFind dsu(n);
-        int goodPaths = 0;
-
-        // Iterate over all the nodes with the same value in sorted order, starting from the lowest
-        // value.
-        for (auto& [value, nodes] : valuesToNodes) {
-            // For every node in nodes, combine the sets of the node and its neighbors into one set.
-            for (int node : nodes) {
-                for (int neighbor : adj[node]) {
-                    // Only choose neighbors with a smaller value, as there is no point in
-                    // traversing to other neighbors.
-                    if (vals[node] >= vals[neighbor]) {
-                        dsu.union_set(node, neighbor);
-                    }
+        for(int i = 0; i < n; i++)
+            sort(adj[i].begin(), adj[i].end());
+        int i = 0, ans = n;
+        while(i < n){
+            int currval = node_vals[i][0], currind = i;
+            while(i < n && node_vals[i][0] == currval){
+                int val = node_vals[i][0], node = node_vals[i][1];
+                for(auto &j: adj[node]){
+                    if(j[0] <= val)
+                        dsu.join_faction(node, j[1]);
+                    else break;
                 }
+                i++;
             }
-            // Map to compute the number of nodes under observation (with the same values) in each
-            // of the sets.
-            unordered_map<int, int> group;
-            // Iterate over all the nodes. Get the set of each node and increase the count of the
-            // set by 1.
-            for (int u : nodes) {
-                group[dsu.find(u)]++;
+            unordered_map<int, int> same_factions;
+            for(int k = currind; k < i; k++)
+                same_factions[dsu.find_faction(node_vals[k][1])]++;
+            // cout<<currval<<':';
+            for(auto &j: same_factions){
+                ans += (j.second * (j.second - 1) / 2);
+                // cout<<j.second<<' ';
             }
-            // For each set of "size", add size * (size + 1) / 2 to the number of goodPaths.
-            for (auto& [_, size] : group) {
-                goodPaths += (size * (size + 1) / 2);
-            }
+            // cout<<'\n';
         }
-        return goodPaths;
+        return ans;
     }
 };
