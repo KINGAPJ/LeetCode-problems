@@ -1,30 +1,51 @@
 class Solution {
+    vector<vector<int>> adj;
+    vector<int> indeg, par;
+    vector<bool> vis;
+    int ans = 0;
 public:
-    int answer = -1;
-
-    void dfs(int node, vector<int>& edges, unordered_map<int, int>& dist, vector<bool>& visit) {
-        visit[node] = true;
-        int neighbor = edges[node];
-
-        if (neighbor != -1 && !visit[neighbor]) {
-            dist[neighbor] = dist[node] + 1;
-            dfs(neighbor, edges, dist, visit);
-        } else if (neighbor != -1 && dist.count(neighbor)) {
-            answer = max(answer, dist[node] - dist[neighbor] + 1);
-        }
-    }
-
-    int longestCycle(vector<int>& edges) {
-        int n = edges.size();
-        vector<bool> visit(n);
-
-        for (int i = 0; i < n; i++) {
-            if (!visit[i]) {
-                unordered_map<int, int> dist;
-                dist[i] = 1;
-                dfs(i, edges, dist, visit);
+    void dfs(int node){
+        vis[node] = true;
+        for(auto &i: adj[node]){
+            par[i] = node;
+            if(!vis[i]){
+                dfs(i);
+            }else{
+                int currans = 2;
+                int currpar = par[node];
+                if(currpar != -1){
+                    // cout<<currpar<<' ';
+                    while(currpar != i){
+                        currpar = par[currpar];
+                        if(currpar == -1)
+                            return;
+                        // cout<<currpar<<' ';
+                        currans++;
+                    }
+                    ans = max(currans, ans);
+                }
             }
         }
-        return answer;
+    }
+    int longestCycle(vector<int>& edges) {
+        int n = edges.size();
+        adj = vector<vector<int>>(n);
+        par = vector<int>(n, -1);
+        indeg = vector<int>(n);
+        vis = vector<bool>(n);
+        for(int i = 0; i < n; i++){
+            if(edges[i] != -1){
+                adj[i].push_back(edges[i]);
+                indeg[edges[i]]++;
+            }
+        }
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                // cout<<"a:"<<ans;
+                // cout<<'\n';
+                dfs(i);
+            }
+        }
+        return ans > 1 ? ans : -1;
     }
 };
