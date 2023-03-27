@@ -1,6 +1,6 @@
 class Solution {
     vector<vector<int>> adj;
-    vector<int> indeg, par;
+    vector<int> par;
     vector<bool> vis;
     int ans = 0;
 public:
@@ -8,18 +8,16 @@ public:
         vis[node] = true;
         for(auto &i: adj[node]){
             par[i] = node;
-            if(!vis[i]){
+            if(!vis[i])
                 dfs(i);
-            }else{
+            else{
                 int currans = 2;
                 int currpar = par[node];
                 if(currpar != -1){
-                    // cout<<currpar<<' ';
                     while(currpar != i){
                         currpar = par[currpar];
                         if(currpar == -1)
                             return;
-                        // cout<<currpar<<' ';
                         currans++;
                     }
                     ans = max(currans, ans);
@@ -31,20 +29,14 @@ public:
         int n = edges.size();
         adj = vector<vector<int>>(n);
         par = vector<int>(n, -1);
-        indeg = vector<int>(n);
         vis = vector<bool>(n);
         for(int i = 0; i < n; i++){
-            if(edges[i] != -1){
+            if(edges[i] != -1)
                 adj[i].push_back(edges[i]);
-                indeg[edges[i]]++;
-            }
         }
         for(int i = 0; i < n; i++){
-            if(!vis[i]){
-                // cout<<"a:"<<ans;
-                // cout<<'\n';
+            if(!vis[i])
                 dfs(i);
-            }
         }
         return ans > 1 ? ans : -1;
     }
