@@ -31,12 +31,6 @@ public:
                 ncr[i][j] = (ncr[i-1][j] % mod + ncr[i-1][j-1] % mod) % mod;
             }
         }
-        for(int i = 2; i <= 5; i++){
-            for(int j = 1; j <= i && j <= 1000; j++){
-                cout<<ncr[i][j]<<' ';
-            }
-            cout<<endl;
-        }
         return dfsdp(nums) - 1;
     }
 };
