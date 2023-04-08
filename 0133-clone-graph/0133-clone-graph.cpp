@@ -39,7 +39,6 @@ public:
     }
     void bfs(Node* node){
         queue<Node*> q;
-        // vis.insert({node->val, node});
         q.push(node);
         while(q.size()){
             auto u = q.front();
