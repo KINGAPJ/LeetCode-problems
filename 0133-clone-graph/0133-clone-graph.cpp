@@ -21,7 +21,7 @@ public:
 
 class Solution {
     Node* root;
-    unordered_map<int, Node*> vis;
+    map<int, Node*> vis;
 public:
     void dfs(Node* node){
         vis.insert({node->val, node});
