@@ -1,14 +1,13 @@
 class Solution {
 public:
     int addDigits(int num) {
-        while(num > 9){
-            long curr = 0;
-            while(num > 0){
-                curr += num % 10;
-                num /= 10;
-            }
-            num = curr;
+        long curr = 0;
+        while(num > 0){
+            curr += num % 10;
+            if(curr >= 10)
+                curr -= 9;
+            num /= 10;
         }
-        return num;
+        return curr;
     }
 };
