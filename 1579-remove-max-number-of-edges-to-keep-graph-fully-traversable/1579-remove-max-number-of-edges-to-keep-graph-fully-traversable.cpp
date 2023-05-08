@@ -1,84 +1,63 @@
-class UnionFind {
-    vector<int> representative;
-    vector<int> componentSize;
-    // Number of distinct components in the graph.
-    int components;
-    
+class DSU{
+    vector<int> nodes, sz;
 public:
-    // Initialize the list representative and componentSize
-    // Each node is representative of itself with size 1.
-    UnionFind(int n) {
-        components = n;
-        for (int i = 0; i <= n; i++) {
-            representative.push_back(i);
-            componentSize.push_back(1);
-        }
+    DSU(int n){
+        sz = vector<int>(n, 1);
+        nodes = vector<int>(n);
+        iota(nodes.begin(), nodes.end(), 0);
     }
-    
-    // Get the root of a node.
-    int findRepresentative(int x) {
-        if (representative[x] == x) {
-            return x;
-        }
-        
-        // Path compression.
-        return representative[x] = findRepresentative(representative[x]);
+    int find(int v){
+        if(v == nodes[v])
+            return v;
+        return nodes[v] = find(nodes[v]); //assigning is an optimization
     }
-    
-    // Perform the union of two components that belongs to node x and node y.
-    int performUnion(int x, int y) {       
-        x = findRepresentative(x); y = findRepresentative(y);
-        
-        if (x == y) {
-            return 0;
+    void unify(int a, int b){
+        a = find(a), b = find(b);
+        if(a != b){
+            if(sz[a] < sz[b])
+                swap(a, b);
+            nodes[b] = a;
+            sz[a] += sz[b];
         }
-        
-        if (componentSize[x] > componentSize[y]) {
-            componentSize[x] += componentSize[y];
-            representative[y] = x;
-        } else {
-            componentSize[y] += componentSize[x];
-            representative[x] = y;
-        }
-        
-        components--;
-        return 1;
-    }
-    
-    // Returns true if all nodes get merged to one.
-    bool isConnected() {
-        return components == 1;
     }
 };
-
 class Solution {
 public:
     int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
-        // Different objects for Alice and Bob.
-        UnionFind Alice(n), Bob(n);
-
-        int edgesRequired = 0;
-        // Perform union for edges of type = 3, for both Alice and Bob.
-        for (vector<int>& edge : edges) {
-            if (edge[0] == 3) {
-                edgesRequired += (Alice.performUnion(edge[1], edge[2]) | Bob.performUnion(edge[1], edge[2]));
+        vector<vector<int>> alice, bob, both;
+        for(auto &i: edges){
+            if(i[0] == 1)
+                alice.push_back(i);
+            else if(i[0] == 2)
+                bob.push_back(i);
+            else
+                both.push_back(i);
+        }
+        DSU Alice(n), Bob(n);
+        int al_cnt = 0, bo_cnt = 0, commoncnt = 0;
+        for(auto &i: both){
+            if(Alice.find(i[1]-1) != Alice.find(i[2]-1)){ //since common are first.. not alice also means not bob
+                commoncnt++;
+                Alice.unify(i[1]-1, i[2]-1);
+                Bob.unify(i[1]-1, i[2]-1);
             }
         }
-
-        // Perform union for Alice if type = 1 and for Bob if type = 2.
-        for (vector<int>& edge : edges) {
-            if (edge[0] == 1) {
-                edgesRequired += Alice.performUnion(edge[1], edge[2]);
-            } else if (edge[0] == 2) {
-                edgesRequired += Bob.performUnion(edge[1], edge[2]);
+        if(commoncnt == n-1)
+            return edges.size() - commoncnt;
+        for(auto &i: alice){
+            if(Alice.find(i[1]-1) != Alice.find(i[2]-1)){
+                al_cnt++;
+                Alice.unify(i[1]-1, i[2]-1);
             }
         }
-
-        // Check if the Graphs for Alice and Bob have n - 1 edges or is a single component.
-        if (Alice.isConnected() && Bob.isConnected()) {
-            return edges.size() - edgesRequired;
+        for(auto &i: bob){
+            if(Bob.find(i[1]-1) != Bob.find(i[2]-1)){
+                bo_cnt++;
+                Bob.unify(i[1]-1, i[2]-1);
+            }
         }
-        
+        if(commoncnt + al_cnt == n-1 && commoncnt + bo_cnt == n-1)
+            return edges.size() - (commoncnt + al_cnt + bo_cnt);
         return -1;
     }
 };
