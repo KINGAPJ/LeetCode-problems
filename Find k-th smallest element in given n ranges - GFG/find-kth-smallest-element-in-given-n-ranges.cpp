@@ -15,18 +15,16 @@ class Solution{
         vector<vector<int>> final;
         final.push_back(ranges.front());
         for(int i = 1; i < ranges.size(); i++){
-            if(ranges[i][0] <= final.back()[1]){
+            if(ranges[i][0] <= final.back()[1])
                 final.back()[1] = max(ranges[i][1], final.back()[1]);
-            }else{
+            else
                 final.push_back(ranges[i]);
-            }
         }
         vector<int> ans(q, -1);
         for(int i = 0; i < queries.size(); i++){
             int curr = 0, j = 0;
-            for(; j < final.size() && curr + (final[j][1] - final[j][0] + 1) < queries[i]; j++){
+            for(; j < final.size() && curr + (final[j][1] - final[j][0] + 1) < queries[i]; j++)
                 curr += (final[j][1] - final[j][0] + 1);
-            }
             if(j < final.size()){
                 int which = (queries[i] - curr) - 1;
                 ans[i] = final[j][0] + which;
