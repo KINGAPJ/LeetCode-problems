@@ -57,34 +57,21 @@ class Solution{
     }
     Node* modifyTheList(struct Node *head){
         //add code here.
-        int n = 0;
-        Node* trav = head;
-        while(trav){
-            n++;
-            trav = trav->next;
+        Node *trav = head, *slow = head, *fast = head;
+        while(fast && fast->next && fast->next->next){
+            slow = slow->next;
+            fast = fast->next->next;
         }
-        trav = head;
-        for(int i = 0; i < (n-1)/2; i++)
-            trav = trav->next;
-        trav->next = rev(trav->next);
-        trav = head;
-        Node* trav1 = trav;
-        for(int i = 0; i < (n+1)/2; i++){
-            trav1 = trav1->next;
-        }
+        slow->next = rev(slow->next);
         int temp = -1;
-        for(int i = 0; i < n/2; i++){
-            // cout<<trav->data<<' '<<trav1->data<<'\n';
+        fast = slow->next;
+        while(fast){
             temp = trav->data;
-            trav->data = trav1->data - trav->data;
-            trav1->data = temp;
-            trav = trav->next;
-            trav1 = trav1->next;
+            trav->data = fast->data - trav->data;
+            fast->data = temp;
+            trav = trav->next, fast = fast->next;
         }
-        trav = head;
-        for(int i = 0; i < (n-1)/2; i++)
-            trav = trav->next;
-        trav->next = rev(trav->next);
+        slow->next = rev(slow->next);
         return head;
     }
 };
