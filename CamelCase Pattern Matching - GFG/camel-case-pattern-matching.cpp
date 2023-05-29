@@ -39,9 +39,8 @@ class Trie{
         }
         vector<int> ret;
         queue<Node*> bfs;
-        for(auto &i: node->ind()){
+        for(auto &i: node->ind())
             ret.push_back(i);
-        }
         for(int i = 'A'; i <= 'Z'; i++){
             if(node->next(i))
                 bfs.push(node->next(i));
@@ -49,9 +48,8 @@ class Trie{
         while(!bfs.empty()){
             auto u = bfs.front();
             bfs.pop();
-            for(auto &i: u->ind()){
+            for(auto &i: u->ind())
                 ret.push_back(i);
-            }
             for(int i = 'A'; i <= 'Z'; i++){
                 if(u->next(i))
                     bfs.push(u->next(i));
@@ -65,9 +63,8 @@ class Solution {
     vector<string> CamelCase(int N, vector<string> dict, string pat) {
         // code here
         Trie trie;
-        for(int i = 0; i < N; i++){
+        for(int i = 0; i < N; i++)
             trie.push(dict[i], i);
-        }
         vector<int> idxs = trie.search(pat);
         vector<string> ans;
         for(auto &i: idxs)
