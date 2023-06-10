@@ -6,7 +6,7 @@ using namespace std;
 // } Driver Code Ends
 class Solution{
 public:
-    void merge(int arr[], int l, int m, int r){
+    void merge(int arr[], int l, int m, int r){ //in place merge sort: O(nlogn) instead of O(n^2.logn)
         if(arr[m] < 0)
             return;
         int lefPos = l, rigPos = m+1;
@@ -14,7 +14,7 @@ public:
             lefPos++;
         while(rigPos <= r && arr[rigPos] < 0)
             rigPos++;
-        reverse(arr+lefPos, arr+m+1);
+        reverse(arr+lefPos, arr+m+1); //The swapping part takes O(n^2) in numbers, but here it is only O(n)
         reverse(arr+m+1, arr+rigPos);
         reverse(arr+lefPos, arr+rigPos);
     }
