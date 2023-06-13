@@ -1,5 +1,5 @@
 class Solution {
-    vector<int> par;
+    // vector<int> par;
     vector<vector<int>> adj;
     set<vector<int>> guess;
     vector<bool> vis;
@@ -12,7 +12,7 @@ public:
             if(!vis[i]){
                 if(guess.count({node, i}))
                     ret++;
-                par[i] = node;
+                // par[i] = node;
                 ret += dfs(i);
             }
         }
@@ -39,27 +39,28 @@ public:
     int rootCount(vector<vector<int>>& edges, vector<vector<int>>& guesses, int k) {
         int n = edges.size() + 1;
         this->k = k;
-        par = vector<int> (n, -1);
+        // par = vector<int> (n, -1);
         adj = vector<vector<int>> (n);
-        vector<int> indeg(n);
+        // vector<int> indeg(n);
         vis = vector<bool> (n);
         for(auto &i: edges){
             adj[i[0]].push_back(i[1]);
             adj[i[1]].push_back(i[0]);
-            indeg[i[0]]++, indeg[i[1]]++;
+            // indeg[i[0]]++, indeg[i[1]]++;
         }
         guess = set<vector<int>> (guesses.begin(), guesses.end());
-        int st = -1, ans = 0, currdfs = 0;
-        for(int i = 0; i < n; i++){
-            if(indeg[i] == 1){
-                par[i] = i;
-                currdfs = dfs(i);
-                ans = (currdfs >= k) ? 1 : 0;
-                st = i;
-                break;
-            }
-        }
-        // cout<<st<<'\n';
+        int st = 0, ans = 0, currdfs = 0;
+        // for(int i = 0; i < n; i++){
+        //     if(indeg[i] == 1){
+        //         par[i] = i;
+        //         currdfs = dfs(i);
+        //         ans = (currdfs >= k) ? 1 : 0;
+        //         st = i;
+        //         break;
+        //     }
+        // }
+        currdfs = dfs(0);
+        ans = currdfs >= k ? 1 : 0;
         vis = vector<bool> (n);
         dfs1(st, currdfs, ans);
         return ans;
