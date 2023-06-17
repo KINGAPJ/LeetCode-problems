@@ -2,9 +2,9 @@ class Solution {
     vector<vector<int>> dp;
     vector<int> nums1, nums2;
 public:
+    //find the element just greater than the previous element in consideration and check using it
     int f(int i, int j){
         int m = nums2.size(), n = nums1.size();
-        // cout<<i<<' '<<j<<'\n';
         if(i == n)
             return 0;
         if(dp[i][j] != -1)
@@ -17,7 +17,6 @@ public:
                 prev = nums1[i-1];
         }
         int smlGrThan = upper_bound(nums2.begin(), nums2.end(), prev) - nums2.begin();
-        // cout<<"s:"<<smlGrThan<<'\n';
         if(smlGrThan == m && prev >= curr)
             return 3001;
         int ans = 3001;
@@ -34,10 +33,6 @@ public:
         int n = arr1.size(), m = arr2.size();
         dp = vector<vector<int>>(n+1, vector<int>(m+1, -1));
         nums1 = arr1, nums2 = arr2;
-        // for(int i = 0; i < nums2.size(); i++){
-        //     cout<<nums2[i]<<' ';
-        // }
-        // cout<<'\n';
         int ans = f(0, 0);
         return ans >= 3001 ? -1 : ans;
     }
