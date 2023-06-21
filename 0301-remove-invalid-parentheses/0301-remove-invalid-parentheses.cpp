@@ -6,9 +6,8 @@ class Solution {
         if(rems < 0)
             return;
         if(i == n){
-            if(lefts == 0){
+            if(lefts == 0)
                 ans.push_back(curr);
-            }
             return;
         }
         int j = i;
