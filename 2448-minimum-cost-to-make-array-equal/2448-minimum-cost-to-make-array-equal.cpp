@@ -1,26 +1,27 @@
 class Solution {
 public:
     long long minCost(vector<int>& nums, vector<int>& cost) {
-        long long lo = INT_MAX, hi = 0, ans = LLONG_MAX;
         int n = nums.size();
-        for(int i = 0; i < n; i++){
-            lo = min(lo, 0LL+nums[i]);
-            hi = max(hi, 0LL+nums[i]);
-        }
-        while(lo <= hi){
-            long long mid = lo + (hi - lo)/2;
-            long long curr1 = 0, curr2 = 0;
-            for(int i = 0; i < n; i++){
-                curr1 += (abs(mid-nums[i]))*cost[i];
-                curr2 += (abs(mid+1-nums[i]))*cost[i];
-            }
-            if(curr1 < curr2){
-                hi = mid - 1;
-                ans = min(curr1, ans);
-            }else{
-                lo = mid + 1;
-                ans = min(curr2, ans);
-            }
+        vector numsCost(n, vector<int>(2));
+        for(int i = 0; i < n; i++)
+            numsCost[i] = {nums[i], cost[i]};
+        sort(numsCost.begin(), numsCost.end());
+        
+        //prefix sum of costs
+        vector<long long> pref(n);
+        pref[0] = numsCost[0][1];
+        for(int i = 1; i < n; i++)
+            pref[i] = pref[i-1] + numsCost[i][1];
+        
+        long long ans = 0, curr = 0;
+        for(int i = 1; i < n; i++)
+            curr += 1LL * numsCost[i][1] * (numsCost[i][0] - numsCost[0][0]);
+        ans = curr;
+        for(int i = 1; i < n; i++){
+            long long gap = numsCost[i][0] - numsCost[i-1][0];
+            curr += 1LL * pref[i-1] * gap;
+            curr -= 1LL * (pref[n-1] - pref[i-1]) * gap;
+            ans = min(ans, curr);
         }
         return ans;
     }
