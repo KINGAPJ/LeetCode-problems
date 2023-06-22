@@ -45,21 +45,18 @@ struct Node
 class Solution{
     public:
     bool detectLoop(Node* head){
+        if(!head->next || !head->next->next)
+            return false;
         Node *slow = head, *fast = head;
-        if(head->next && head->next->next){
-            slow = head->next;
-            fast = head->next->next;
-            while(slow != fast){
-                if(slow->next && fast->next && fast->next->next){
-                    slow = slow->next;
-                    fast = fast->next->next;
-                }else
-                    return false;
-            }
+        slow = head->next;
+        fast = head->next->next;
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
             if(slow == fast)
                 return true;
-        }else
-            return false;
+        }
+        return false;
     }
 };
 
