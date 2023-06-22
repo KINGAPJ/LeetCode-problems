@@ -7,25 +7,21 @@ using namespace std;
 //User function Template for C++
 class Solution{
     public:
-    vector<long long int> twoOddNum(long long int Arr[], long long int N)  
-    {
-        // code here
-        long long x = 0;
+    vector<long long> twoOddNum(long long Arr[], long long N)  {
+        long long xy = 0, x = 0;
         for(int i = 0; i < N; i++)
-            x ^= Arr[i];
-        int diff = -1;
-        for(int i = 0; i < 64; i++)
-            if((1<<i) & x){
-                diff = i;
+            xy ^= Arr[i];
+        int setbit = -1;
+        for(int i = 0; i < 64; i++){
+            if((1LL<<i) & xy){
+                setbit = i;
                 break;
             }
-        long long first = 0, second = 0;
-        for(int i = 0; i < N; i++){
-            if(Arr[i] & (1<<diff))
-                first ^= Arr[i];
-            else second ^= Arr[i];
         }
-        return {max(first, second), min(first, second)};
+        for(int i = 0; i < N; i++)
+            if((1LL<<setbit) & Arr[i])
+                x ^= Arr[i];
+        return {max(x^xy, x), min(x^xy, x)};
     }
 };
 
