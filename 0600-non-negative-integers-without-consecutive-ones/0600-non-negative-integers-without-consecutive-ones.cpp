@@ -12,19 +12,14 @@ class Solution {
         int k = tight ? bits[i] : 1;
         for(int j = 0; j <= k; j++){
             newtight = (j == bits[i]) ? tight : false;
-            if(prev == 1){
-                if(j == 1){
-                    if(!tight)
-                        ans += (1<<(n-1-i));
-                    else{
-                        int rem = 0;
-                        for(int x = i+1; x < n; x++)
-                            rem = (rem<<1)+bits[x];
-                        ans += rem+1;
-                    }
-                }
-                else
-                    ans += f(i+1, newtight, j);
+            if(j == 1 && prev == 1){
+                if(tight){
+                    int rem = 0;
+                    for(int x = i+1; x < n; x++)
+                        rem = (rem<<1)+bits[x];
+                    ans += rem+1;
+                }else
+                    ans += (1<<(n-1-i));
             }else
                 ans += f(i+1, newtight, j);
         }
