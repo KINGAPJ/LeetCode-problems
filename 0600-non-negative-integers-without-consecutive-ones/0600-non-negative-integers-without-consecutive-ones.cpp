@@ -3,7 +3,6 @@ class Solution {
     vector<vector<vector<int>>> dp;
     int f(int i, bool tight, int prev){
         int n = bits.size();
-        // cout<<i<<' '<<tight<<' '<<prev<<'\n';
         if(i == n)
             return 0;
         if(dp[i][tight][prev] != -1)
@@ -24,20 +23,15 @@ class Solution {
                         ans += rem+1;
                     }
                 }
-                else{
+                else
                     ans += f(i+1, newtight, j);
-                }
-            }else{
+            }else
                 ans += f(i+1, newtight, j);
-            }
         }
-        // cout<<i<<' '<<tight<<' '<<prev<<' '<<ans<<'\n';
         return dp[i][tight][prev] = ans;
-        // return ans;
     }
 public:
     int findIntegers(int n) {
-        // cout<<n<<'\n';
         vector<int> bs;
         int N = n;
         while(n){
@@ -46,8 +40,6 @@ public:
         }
         reverse(bs.begin(), bs.end());
         bits = bs;
-        // for(int i = 0; i < bs.size(); i++)
-        //     cout<<bits[i]<<' ';
         dp = vector(bits.size()+1, vector<vector<int>>(2, vector<int>(2, -1)));
         return N+1 - f(0, true, 0);
     }
