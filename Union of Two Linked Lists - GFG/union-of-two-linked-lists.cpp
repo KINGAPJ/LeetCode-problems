@@ -81,7 +81,9 @@ class Solution{
         temp = head1;
         while(temp->next){
             if(temp->next->data == temp->data){
-                temp->next = temp->next->next;
+                Node* dum = temp->next->next;
+                delete(temp->next);
+                temp->next = dum;
             }else{
                 temp = temp->next;
             }
