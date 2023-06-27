@@ -73,6 +73,23 @@ class Solution{
         return merge(l1, l2);
     }
     Node* makeUnion(Node* head1, Node* head2){
+        set<int> vals;
+        while(head1){
+            vals.insert(head1->data);
+            head1 = head1->next;
+        }
+        while(head2){
+            vals.insert(head2->data);
+            head2 = head2->next;
+        }
+        Node* ret = new Node(0);
+        Node* tmp = ret;
+        for(auto &i: vals){
+            Node* newNode = new Node(i);
+            tmp->next = newNode;
+            tmp = tmp->next;
+        }
+        return ret->next;
         Node* temp = head1;
         while(temp->next)
             temp = temp->next;
