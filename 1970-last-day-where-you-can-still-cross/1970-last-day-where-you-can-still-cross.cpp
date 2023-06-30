@@ -37,7 +37,6 @@ class Solution {
 public:
     int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
         m = row+1, n = col;
-        // cout<<'\n';
         DSU dsu(row+1, col); //+1 for dummy 0 nodes
         vector grid(row+1, vector<int>(col));
         for(int i = 1; i < row+1; i++){
@@ -46,24 +45,11 @@ public:
         }
         for(int i = 0; i < cells.size(); i++){
             grid[cells[i][0]][cells[i][1]-1] = 1;
-            // for(int p = 0; p <= row; p++){
-            //     for(int q = 0; q < col; q++){
-            //         cout<<grid[p][q]<<' ';
-            //     }
-            //     cout<<'\n';
-            // }
             for(int k = 0; k < 8; k++){
                 int r = cells[i][0] + dx[k], c = cells[i][1]-1 + dy[k];
                 if(isv(r, c) && grid[r][c] == 1){
                     dsu.join({cells[i][0], cells[i][1]-1}, {r, c});
-                    // cout<<cells[i][0]<<' '<<cells[i][1]<<' '<<r<<' '<<c<<":\n";
-                    // auto [g1, h1] = dsu.find({cells[i][0], cells[i][1]-1});
-                    // auto [g2, h2] = dsu.find({r, c});
-                    // cout<<g1<<' '<<g2<<' '<<h1<<' '<<h2<<'\n';
                 }
-                // auto [g1, h1] = dsu.find({0, 0});
-                // auto [g2, h2] = dsu.find({0, col-1});
-                // cout<<g1<<' '<<g2<<' '<<h1<<' '<<h2<<'\n';
                 if(dsu.find({0, 0}) == dsu.find({0, col-1}))
                     return i;
             }
