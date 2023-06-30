@@ -13,24 +13,14 @@ public:
             for(int i = 0; i < mid; i++){
                 grid[cells[i][0]-1][cells[i][1]-1] = 1;
             }
-            // cout<<mid<<'\n';
-            // for(int i = 0; i < row; i++){
-            //     for(int j = 0; j < col; j++)
-            //         cout<<grid[i][j]<<' ';
-            //     cout<<'\n';
-            // }
             queue<pair<int, int>> q;
             for(int i = 0; i < col; i++){
-                if(grid[0][i] == 0){
-                    // cout<<'{'<<"0,"<<i<<"} ";
+                if(grid[0][i] == 0)
                     q.push({0, i});
-                }
             }
-            // cout<<'\n';
             bool yes = false;
             while(!q.empty()){
                 auto [i, j] = q.front();
-                // cout<<'{'<<i<<","<<i<<"} ";
                 q.pop();
                 if(i == row-1){
                     yes = true;
@@ -47,10 +37,8 @@ public:
             if(yes){
                 lo = mid + 1;
                 ans = max(ans, mid);
-            }else{
+            }else
                 hi = mid - 1;
-            }
-            // cout<<ans<<'\n';
         }
         return ans;
     }
