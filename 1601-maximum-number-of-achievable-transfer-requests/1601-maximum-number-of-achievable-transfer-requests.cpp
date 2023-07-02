@@ -7,12 +7,9 @@ class Solution {
         if(i == m){
             bool valid = true;
             for(int x = 0; x < deg.size(); x++){
-                // cout<<deg[x]<<' ';
-                if(deg[x] != 0){
+                if(deg[x] != 0)
                     valid = false;
-                }
             }
-            // cout<<endl;
             if(valid)
                 ans = max(ans, rqsts);
             return;
