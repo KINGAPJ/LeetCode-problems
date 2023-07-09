@@ -16,18 +16,20 @@ class Solution {
                 curr = 0;
                 ok = false;   
             }
-            if(ok){
+            if(ok)
                 res = max(res, curr);
-            }
         }
         return res;
     }
 public:
     int largestVariance(string s) {
+        int frq[26] = {0};
         int n = s.size(), ans = 0;
+        for(auto &i: s)
+            frq[i-'a']++;
         for(int i = 'a'; i <= 'z'; i++){
             for(int j = 'a'; j <= 'z'; j++){
-                if(i == j)
+                if(i == j || frq[i-'a'] == 0 || frq[j-'a'] == 0)
                     continue;
                 vector<int> arr(n);
                 for(int ind = 0; ind < n; ind++){
