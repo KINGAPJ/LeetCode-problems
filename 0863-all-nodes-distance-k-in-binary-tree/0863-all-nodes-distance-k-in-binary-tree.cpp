@@ -24,15 +24,12 @@ class Solution {
         vis.insert(node);
         if(k == 0)
             res.push_back(node->val);
-        if(node->left && !vis.count(node->left)){
+        if(node->left && !vis.count(node->left))
             dfs(node->left, k-1);
-        }
-        if(node->right && !vis.count(node->right)){
+        if(node->right && !vis.count(node->right))
             dfs(node->right, k-1);
-        }
-        if(par[node] && !vis.count(par[node])){
+        if(par[node] && !vis.count(par[node]))
             dfs(par[node], k-1);
-        }
     }
 public:
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
