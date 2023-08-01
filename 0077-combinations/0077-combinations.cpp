@@ -1,21 +1,17 @@
 class Solution {
-    vector<vector<int>> res;
-    void recur(int n, int k, vector<int>& curr){
-        if(k == 0){
-            res.push_back(curr);
-            return;
-        }
-        if(n == 0)
-            return;
-        curr.push_back(n);
-        recur(n-1, k-1, curr);
-        curr.pop_back();
-        recur(n-1, k, curr);
-    }
 public:
     vector<vector<int>> combine(int n, int k) {
-        vector<int> curr;
-        recur(n, k, curr);
+        vector<vector<int>> res;
+        for(int i = 1; i < (1<<n); i++){
+            if(__builtin_popcount(i) == k){
+                vector<int> curr;
+                for(int j = 0; j < n; j++){
+                    if(i & (1<<j))
+                        curr.push_back(j+1);
+                }
+                res.push_back(curr);
+            }
+        }
         return res;
     }
 };
