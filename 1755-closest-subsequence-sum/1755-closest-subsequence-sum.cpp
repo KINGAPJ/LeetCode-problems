@@ -33,13 +33,6 @@ public:
         int n = nums.size();
         sort(one.begin(), one.end());
         check(n/2, 0, goal);
-        int tar = goal;
-        int moreind = lower_bound(one.begin(), one.end(), tar) - one.begin();
-        int lessind = moreind-1;
-        if(moreind < n)
-            ans = min(ans, abs(goal-(one[moreind])));
-        if(lessind >= 0)
-            ans = min(ans, abs(goal-(one[lessind])));
         return ans;
     }
 };
