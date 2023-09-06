@@ -13,14 +13,6 @@ class Solution {
                 dfs(i, reach, adj, vis);
         }
     }
-    void topoDfs(int node, vector<int> adj[], vector<bool> &vis, vector<int>& topo){
-        vis[node] = 1;
-        for(auto &x: adj[node]){
-            if(!vis[x])
-                topoDfs(x, adj, vis, topo);
-        }
-        topo.push_back(node);
-    }
     public:
     //Function to find a Mother Vertex in the Graph.
 	int findMotherVertex(int V, vector<int>adj[]){
@@ -33,21 +25,18 @@ class Solution {
         int numZeroIndeg = 0, zeroIndegVert = -1;
         for(int i = 0; i < V; i++){
             if(deg[i] == 0){
-                if(numZeroIndeg > 0){
+                if(numZeroIndeg > 0)
                     return -1;
-                }
                 zeroIndegVert = i;
                 numZeroIndeg++;
             }
         }
         int reach = 0;
         vector<bool> vis(V);
-        // cout<<zeroInde
         if(numZeroIndeg == 1){
             dfs(zeroIndegVert, reach, adj, vis);
-            if(reach != V){
+            if(reach != V)
                 return -1;
-            }
         }
         vis = vector<bool> (V);
         int ans = -1;
@@ -57,16 +46,14 @@ class Solution {
             if(!vis[i]){
                 ans = i;
                 dfs(i, reach, adj, vis);
-                // topoDfs(i, adj, vis, topo);
             }
         }
         if(reach == V){
             vis = vector<bool> (V);
             reach = 0;
             dfs(ans, reach, adj, vis);
-            if(reach != V){
+            if(reach != V)
                 return -1;
-            }
         }
         return ans;
 	}
