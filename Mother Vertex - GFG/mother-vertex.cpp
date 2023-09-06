@@ -41,7 +41,6 @@ class Solution {
         vis = vector<bool> (V);
         int ans = -1;
         reach = 0;
-        vector<int> topo;
         for(int i = 0; i < V; i++){
             if(!vis[i]){
                 ans = i;
