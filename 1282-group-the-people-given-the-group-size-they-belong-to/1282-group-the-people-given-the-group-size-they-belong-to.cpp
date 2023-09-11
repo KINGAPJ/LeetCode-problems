@@ -1,20 +1,15 @@
 class Solution {
 public:
     vector<vector<int>> groupThePeople(vector<int>& groupSizes) {
-        unordered_map<int, vector<int>> grps;
-        int n = groupSizes.size();
-        for(int i = 0; i < n; i++){
-            grps[groupSizes[i]].push_back(i);
-        }
         vector<vector<int>> ans;
-        for(auto &i: grps){
-            int numGrps = i.second.size()/i.first;
-            int ind = 0;
-            for(int j = 0; j < numGrps; j++){
-                vector<int> temp;
-                for(int k = 0; k < i.first; k++)
-                    temp.push_back(i.second[ind++]);
-                ans.push_back(temp);
+        // A map from group size to the list of indices that are there in the group.
+        vector<int> szToGroup[groupSizes.size() + 1];
+        for (int i = 0; i < groupSizes.size(); i++) {
+            szToGroup[groupSizes[i]].push_back(i);
+            // When the list size equals the group size, empty it and store it in the answer.
+            if (szToGroup[groupSizes[i]].size() == groupSizes[i]) {
+                ans.push_back(szToGroup[groupSizes[i]]);
+                szToGroup[groupSizes[i]].clear();
             }
         }
         return ans;
