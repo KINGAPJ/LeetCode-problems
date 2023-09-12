@@ -9,15 +9,13 @@ class Solution {
         // code here
         if(N == 1)
             return false;
-        vector<long long> factors;
-        factors.push_back(1);
+        long long sum = 1;
         for(long long i = 2; i*i <= N; i++)
             if(N%i == 0){
-                factors.push_back(i);
+                sum += i;
                 if(i != N/i)
-                    factors.push_back(N/i);
+                    sum += (N/i);
             }
-        long long sum = accumulate(factors.begin(), factors.end(), 0LL);
         return sum == N;
     }
 };
