@@ -1,9 +1,8 @@
-#define ll long long
 class Solution {
-    const ll mod = 1e9 + 7;
-    ll _p(ll x, ll n){
+    const long long mod = 1e9 + 7;
+    long long _p(long long x, long long n){
         x %= mod;
-        ll res = 1;
+        long long res = 1;
         while(n){
             if(n&1)
                 res = (res * x) % mod;
