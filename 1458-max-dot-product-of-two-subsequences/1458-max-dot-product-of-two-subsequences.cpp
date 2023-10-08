@@ -27,6 +27,6 @@ public:
         sml2 = *min_element(nums2.begin(), nums2.end());
         grt1 = *max_element(nums1.begin(), nums1.end());
         grt2 = *max_element(nums2.begin(), nums2.end());
-        return max({sml1*grt2, grt1*sml2, sml1*sml2, grt1*grt2});
+        return max(sml1*grt2, grt1*sml2);
     }
 };
