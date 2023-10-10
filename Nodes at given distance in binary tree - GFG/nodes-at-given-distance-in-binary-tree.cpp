@@ -109,7 +109,8 @@ private:
         findNodes(node->left, k-1);
         findNodes(node->right, k-1);
     }
-    void dfs(Node* node, int target, int &k){
+    void dfs(Node* node, int target, int &k){ 
+        // k passed as reference so that while backtracking, it can be reduced and given to parent
         if(!node)
             return;
         if(node->data == target){
@@ -124,15 +125,15 @@ private:
                 else if(k == 0)
                     ans.push_back(node->data);
                 k--;
-            }else{
-                dfs(node->right, target, k);
-                if(found){
-                    if(k != 0)
-                        findNodes(node->left, k-1);
-                    else if(k == 0)
-                        ans.push_back(node->data);
-                    k--;
-                }
+                return;
+            }
+            dfs(node->right, target, k);
+            if(found){
+                if(k != 0)
+                    findNodes(node->left, k-1);
+                else if(k == 0)
+                    ans.push_back(node->data);
+                k--;
             }
         }
     }
