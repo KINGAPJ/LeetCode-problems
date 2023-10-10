@@ -8,33 +8,49 @@
  * };
  */
 class Solution {
-    unordered_map<TreeNode*, TreeNode*> par;
-    unordered_set<TreeNode*> vis;
-    vector<int> res;
-    void set_par(TreeNode* node, TreeNode* parent){
-        if(!node)
+    vector<int> ans;
+    bool found = false;
+    void findNodes(TreeNode* root, int k){
+        if(!root)
             return;
-        par[node] = parent;
-        set_par(node->left, node);
-        set_par(node->right, node);
+        if(k == 0){
+            ans.push_back(root->val);
+            return;
+        }
+        findNodes(root->left, k-1);
+        findNodes(root->right, k-1);
     }
-    void dfs(TreeNode* node, int k){
-        if(!node)
+    void dfs(TreeNode* root, TreeNode* target, int &k){
+        //k passed as reference for parents to pass it on to other subtree
+        if(!root)
             return;
-        vis.insert(node);
-        if(k == 0)
-            res.push_back(node->val);
-        if(node->left && !vis.count(node->left))
-            dfs(node->left, k-1);
-        if(node->right && !vis.count(node->right))
-            dfs(node->right, k-1);
-        if(par[node] && !vis.count(par[node]))
-            dfs(par[node], k-1);
+        if(root == target){
+            found = true;
+            findNodes(root, k);
+            k--;
+        }else{
+            dfs(root->left, target, k);
+            if(found){
+                if(k > 0)
+                    findNodes(root->right, k-1);
+                else if(k == 0)
+                    ans.push_back(root->val);
+                k--;
+                return;
+            }
+            dfs(root->right, target, k);
+            if(found){
+                if(k > 0)
+                    findNodes(root->left, k-1);
+                else if(k == 0)
+                    ans.push_back(root->val);
+                k--;
+            }
+        }
     }
 public:
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        set_par(root, nullptr);
-        dfs(target, k);
-        return res;
+        dfs(root, target, k);
+        return ans;
     }
 };
