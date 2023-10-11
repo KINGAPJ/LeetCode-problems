@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        int n = nums.size();
+        int ans = n;
+        set<int> unique(nums.begin(), nums.end());
+        vector<int> newNums = vector<int> (unique.begin(), unique.end());
+        for (int i = 0; i < newNums.size(); i++) {
+            int left = newNums[i];
+            int right = left + n - 1;
+            int j = upper_bound(newNums.begin(), newNums.end(), right) - newNums.begin();
+            int count = j - i;
+            ans = min(ans, n - count);
+        }
+        
+        return ans;
+    }
+};
