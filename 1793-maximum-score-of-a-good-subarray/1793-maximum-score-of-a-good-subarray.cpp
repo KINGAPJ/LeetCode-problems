@@ -1,26 +1,24 @@
 class Solution {
 public:
     int maximumScore(vector<int>& nums, int k) {
-        vector<int> sortedMins;
-        int n = nums.size(), currMin = nums[k];
-        sortedMins.push_back(currMin);
-        for(int i = k+1; i < n; i++){
-            currMin = min(currMin, nums[i]);
-            sortedMins.push_back(currMin);
-        }
-        currMin = nums[k];
-        for(int i = k-1; i >= 0; i--){
-            currMin = min(currMin, nums[i]);
-            sortedMins.push_back(currMin);
-        }
-        sort(sortedMins.begin(), sortedMins.end());
+        int n = nums.size();
+        int left = k;
+        int right = k;
         int ans = nums[k];
-        for(int i = 0; i < n; i++){ //size of sortedMins == n
-            int numsLess = lower_bound(sortedMins.begin(), sortedMins.end(), 
-                                       sortedMins[i]) - sortedMins.begin();
-            int numsGreater = n - numsLess;
-            ans = max(ans, numsGreater * sortedMins[i]);
+        int currMin = nums[k];
+        
+        while (left > 0 || right < n - 1) {
+            if ((left > 0 ? nums[left - 1]: 0) < (right < n - 1 ? nums[right + 1] : 0)) {
+                right++;
+                currMin = min(currMin, nums[right]);
+            } else {
+                left--;
+                currMin = min(currMin, nums[left]);
+            }
+            
+            ans = max(ans, currMin * (right - left + 1));
         }
+        
         return ans;
     }
 };
