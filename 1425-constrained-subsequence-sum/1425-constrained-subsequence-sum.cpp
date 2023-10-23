@@ -1,28 +1,22 @@
 class Solution {
 public:
     int constrainedSubsetSum(vector<int>& nums, int k) {
-        priority_queue<pair<int, int>> pq;
-        int bestSum = 0, currSum = 0, n = nums.size();
-        for(int i = 0; i < n; i++){
-            while(!pq.empty() && pq.top().second < i-k)
-                pq.pop();
-            if(!pq.empty()){
-                auto u = pq.top();
-                if(u.first < 0)
-                    currSum = 0;
-                else{
-                    currSum = u.first;
-                    bestSum = max(currSum, bestSum);
+        map<int, int> window;
+        window[0] = 0;
+        vector<int> dp(nums.size());
+        
+        for (int i = 0; i < nums.size(); i++) {
+            dp[i] = nums[i] + window.rbegin()->first;
+            window[dp[i]]++;
+            
+            if (i >= k) {
+                window[dp[i - k]]--;
+                if (window[dp[i - k]] == 0) {
+                    window.erase(dp[i - k]);
                 }
             }
-            currSum += nums[i];
-            if(currSum < 0)
-                currSum = 0;
-            bestSum = max(currSum, bestSum);
-            pq.push({currSum, i});
         }
-        if(bestSum == 0)
-            return *max_element(nums.begin(), nums.end());
-        return bestSum;
+        
+        return *max_element(dp.begin(), dp.end());
     }
 };
