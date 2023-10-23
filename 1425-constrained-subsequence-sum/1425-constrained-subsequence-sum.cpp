@@ -1,20 +1,28 @@
 class Solution {
 public:
     int constrainedSubsetSum(vector<int>& nums, int k) {
-        priority_queue<pair<int, int>> heap;
-        heap.push({nums[0], 0});
-        int ans = nums[0];
-        
-        for (int i = 1; i < nums.size(); i++) {
-            while (i - heap.top().second > k) {
-                heap.pop();
+        priority_queue<pair<int, int>> pq;
+        int bestSum = 0, currSum = 0, n = nums.size();
+        for(int i = 0; i < n; i++){
+            while(!pq.empty() && pq.top().second < i-k)
+                pq.pop();
+            if(!pq.empty()){
+                auto u = pq.top();
+                if(u.first < 0)
+                    currSum = 0;
+                else{
+                    currSum = u.first;
+                    bestSum = max(currSum, bestSum);
+                }
             }
-
-            int curr = max(0, heap.top().first) + nums[i];
-            ans = max(ans, curr);
-            heap.push({curr, i});
+            currSum += nums[i];
+            if(currSum < 0)
+                currSum = 0;
+            bestSum = max(currSum, bestSum);
+            pq.push({currSum, i});
         }
-        
-        return ans;
+        if(bestSum == 0)
+            return *max_element(nums.begin(), nums.end());
+        return bestSum;
     }
 };
