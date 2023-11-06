@@ -7,15 +7,14 @@ public:
                 i++;
             if(i < n){
                 maxElem = max(maxElem, arr[i]);
-                if(arr[currInd] > arr[i]){
+                if(arr[currInd] > arr[i])
                     wins++;
-                }else{
+                else{
                     currInd = i;
                     wins = 1;
                 }
-                if(wins == k){
+                if(wins == k)
                     return arr[currInd];
-                }
             }
             i++;
         }
