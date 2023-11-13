@@ -1,21 +1,38 @@
 class Solution {
-    bool isVowel(char a){
-        a = tolower(a);
-        return a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u';
-    }
 public:
+    // Returns true if the character is a vowel.
+    bool isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'o'|| c == 'u'|| c == 'i' 
+            || c == 'A' || c == 'E' || c == 'O'|| c == 'U'|| c == 'I';
+    }
+    
     string sortVowels(string s) {
-        vector<char> vowels;
-        vector<int> inds;
-        for(int i = 0; i < s.size(); i++){
-            if(isVowel(s[i])){
-                vowels.push_back(s[i]);
-                inds.push_back(i);
+        unordered_map<char, int> count;
+
+        // Store the frequencies for each character.
+        for (char c : s) {
+            if (isVowel(c)) {
+                count[c]++;
             }
         }
-        sort(vowels.begin(), vowels.end());
-        for(int i = 0; i < inds.size(); i++)
-            s[inds[i]] = vowels[i];
-        return s;
+
+        // Sorted string having all the vowels.
+        string sortedVowel = "AEIOUaeiou";
+        string ans;
+        int j = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (!isVowel(s[i])) {
+                ans += s[i];
+            } else {
+                // Skip to the character which is having remaining count.
+                while (count[sortedVowel[j]] == 0) {
+                    j++;
+                }
+
+                ans += sortedVowel[j];
+                count[sortedVowel[j]]--;
+            }
+        }
+        return ans;
     }
 };
