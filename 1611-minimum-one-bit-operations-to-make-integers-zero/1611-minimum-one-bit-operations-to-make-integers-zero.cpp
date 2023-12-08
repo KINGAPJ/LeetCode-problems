@@ -1,17 +1,19 @@
 class Solution {
+    string toBin(int n) { 
+        string s = bitset<32>(n).to_string(); 
+        auto loc = s.find('1');
+        if(loc != string::npos) 
+            return s.substr(loc); 
+        return "0"; 
+    } 
 public:
     int minimumOneBitOperations(int n) {
-        if (n == 0) {
-            return 0;
+        string binRep = toBin(n);
+        int ans = 0, sz = binRep.size();
+        for(int i = sz-1; i >= 0; i--){
+            if(binRep[i] == '1')
+                ans = (1<<(sz-i)) - 1 - ans;
         }
-        
-        int k = 0;
-        int curr = 1;
-        while (curr * 2 <= n) {
-            curr *= 2;
-            k++;
-        }
-        
-        return (1 << (k + 1)) - 1 - minimumOneBitOperations(n ^ curr);
+        return ans;
     }
 };
